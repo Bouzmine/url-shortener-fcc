@@ -6,6 +6,15 @@ var dbUrl = "mongodb://url:fccFTW@ds153732.mlab.com:53732/fcc";
 
 app.get("/new/*", function (request, response) {
   var url = request.params[0];
+  
+  if(!(/^((http|https):\/\/){1}(www\.)?[^\/_]{2,}\.{1}[a-z]{2,}\/.*$/.test(url))) {
+    response.json({
+      error: "Invalid URL",
+      originalUrl: url,
+      shortUrl: null
+    });
+  }
+  
   MongoClient.connect(dbUrl, function(err, db) {
     if(err) {
       return response.end("Error 500" + err);
